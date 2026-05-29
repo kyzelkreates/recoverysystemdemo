@@ -3,60 +3,222 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Recovery Monitor System — A monitoring and visualisation system for recovery, rest, performance, and reset cycles." />
+  <meta name="description" content="Recovery Monitor System — Demo Hub" />
   <meta name="theme-color" content="#0b1120" />
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Recovery Monitor System — Demo Hub</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: #0b1120;
+      color: #e8ecf4;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="ui/ndos.css" />
-  <link rel="stylesheet" href="ui/tour.css" />
+    .hub-header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
 
-  <!-- PWA -->
-  <link rel="manifest" href="pwa/manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Recovery Monitor" />
+    .hub-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 14px #34d399;
+      margin: 0 auto 18px;
+      animation: pulse 2s ease-in-out infinite;
+    }
 
-  <!-- Disclaimer (non-medical) -->
-  <!-- This application is NOT a medical device, does NOT diagnose any condition,
-       and does NOT replace professional support. For monitoring and personal use only. -->
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.9)} }
 
-  <title>Recovery Monitor System</title>
+    .hub-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: #e8ecf4;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .hub-sub {
+      font-size: 1rem;
+      color: #5a6180;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .hub-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 860px;
+    }
+
+    .hub-card {
+      background: #101828;
+      border: 1px solid #1e2a45;
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hub-card:hover {
+      border-color: #5b72e8;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .hub-card--patient:hover { border-color: #34d399; box-shadow: 0 12px 40px rgba(52,211,153,0.15); }
+    .hub-card--clinician:hover { border-color: #5b72e8; box-shadow: 0 12px 40px rgba(91,114,232,0.15); }
+
+    .hub-card__icon {
+      font-size: 2.4rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hub-card--patient .hub-card__icon   { background: rgba(52,211,153,0.1); }
+    .hub-card--clinician .hub-card__icon { background: rgba(91,114,232,0.1); }
+
+    .hub-card__title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e8ecf4;
+    }
+
+    .hub-card__desc {
+      font-size: 0.875rem;
+      color: #8a93b2;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .hub-card__features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .hub-card__features li {
+      font-size: 0.8125rem;
+      color: #5a6180;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hub-card__features li::before { content: "✓"; color: #34d399; font-weight: 600; }
+    .hub-card--clinician .hub-card__features li::before { color: #5b72e8; }
+
+    .hub-card__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+
+    .hub-card--patient .hub-card__cta   { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+    .hub-card--clinician .hub-card__cta { background: rgba(91,114,232,0.12); color: #5b72e8; border: 1px solid rgba(91,114,232,0.3); }
+    .hub-card--patient .hub-card__cta:hover   { background: rgba(52,211,153,0.2); }
+    .hub-card--clinician .hub-card__cta:hover { background: rgba(91,114,232,0.2); }
+
+    .hub-footer {
+      margin-top: 48px;
+      font-size: 0.775rem;
+      color: #2a3050;
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .hub-tag {
+      display: inline-block;
+      background: rgba(91,114,232,0.1);
+      color: #5b72e8;
+      border: 1px solid rgba(91,114,232,0.2);
+      border-radius: 6px;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+  </style>
 </head>
 <body>
 
-  <div id="ndos-root"></div>
+  <header class="hub-header">
+    <div class="hub-dot"></div>
+    <div class="hub-tag">Demo Hub</div>
+    <h1 class="hub-title">Recovery Monitor System</h1>
+    <p class="hub-sub">A monitoring and visualisation system for recovery, rest, performance, and reset cycles.</p>
+  </header>
 
-  <script type="module">
-    import { mountDashboard } from "./ui/dashboard.js";
-    import { initTour } from "./ui/tour.js";
+  <div class="hub-cards">
 
-    // Mount the Recovery Monitor dashboard
-    const root = document.getElementById("ndos-root");
-    mountDashboard(root);
+    <a href="patient.html" class="hub-card hub-card--patient">
+      <div class="hub-card__icon">🩺</div>
+      <div class="hub-card__title">Patient PWA</div>
+      <div class="hub-card__desc">
+        Full patient-facing recovery dashboard. Track your metrics, log sessions, follow recovery cycles, and view clinician notes.
+      </div>
+      <ul class="hub-card__features">
+        <li>Live recovery metrics & status</li>
+        <li>Session logging & step-by-step breakdown</li>
+        <li>Morning, Midday & Evening cycles</li>
+        <li>Reset sequences & activation prompts</li>
+        <li>Clinician notes viewer</li>
+        <li>Recovery Guide AI tour</li>
+      </ul>
+      <span class="hub-card__cta">Open Patient App →</span>
+    </a>
 
-    // Init AI tour guide (auto-triggers for first-time users)
-    initTour();
+    <a href="clinician.html" class="hub-card hub-card--clinician">
+      <div class="hub-card__icon">📊</div>
+      <div class="hub-card__title">Clinician Dashboard</div>
+      <div class="hub-card__desc">
+        Full clinical overview of all patients. Live metrics, 7-day trend charts, session status, notes, and alert monitoring.
+      </div>
+      <ul class="hub-card__features">
+        <li>Multi-patient overview panel</li>
+        <li>Live metric monitoring with alerts</li>
+        <li>7-day energy, rest & fatigue trends</li>
+        <li>Session status tracking</li>
+        <li>Clinician notes (add & view)</li>
+        <li>Full state history log</li>
+      </ul>
+      <span class="hub-card__cta">Open Clinician Dashboard →</span>
+    </a>
 
-    // Register service worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/recovery-monitor/pwa/sw.js", { scope: "/recovery-monitor/" })
-        .then(() => console.log("[RMS] Service worker registered"))
-        .catch((err) => console.warn("[RMS] SW registration failed:", err));
-    }
+  </div>
 
-    // Handle URL view param (for PWA shortcuts)
-    const params = new URLSearchParams(window.location.search);
-    const view = params.get("view");
-    if (view) {
-      import("./ui/dashboard.js").then(({ navigate }) => navigate(view));
-    }
-  </script>
+  <footer class="hub-footer">
+    Recovery Monitor System is a personal monitoring tool. It is not a medical device, does not diagnose or treat any condition, and does not replace professional medical support.
+  </footer>
 
 </body>
 </html>
