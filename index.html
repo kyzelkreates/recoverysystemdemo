@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Recovery Monitor System — A monitoring and visualisation system for recovery, rest, performance, and reset cycles." />
+  <meta name="theme-color" content="#0b1120" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="ui/ndos.css" />
+  <link rel="stylesheet" href="ui/tour.css" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="pwa/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Recovery Monitor" />
+
+  <!-- Disclaimer (non-medical) -->
+  <!-- This application is NOT a medical device, does NOT diagnose any condition,
+       and does NOT replace professional support. For monitoring and personal use only. -->
+
+  <title>Recovery Monitor System</title>
+</head>
+<body>
+
+  <div id="ndos-root"></div>
+
+  <script type="module">
+    import { mountDashboard } from "./ui/dashboard.js";
+    import { initTour } from "./ui/tour.js";
+
+    // Mount the Recovery Monitor dashboard
+    const root = document.getElementById("ndos-root");
+    mountDashboard(root);
+
+    // Init AI tour guide (auto-triggers for first-time users)
+    initTour();
+
+    // Register service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/recovery-monitor/pwa/sw.js", { scope: "/recovery-monitor/" })
+        .then(() => console.log("[RMS] Service worker registered"))
+        .catch((err) => console.warn("[RMS] SW registration failed:", err));
+    }
+
+    // Handle URL view param (for PWA shortcuts)
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get("view");
+    if (view) {
+      import("./ui/dashboard.js").then(({ navigate }) => navigate(view));
+    }
+  </script>
+
+</body>
+</html>
